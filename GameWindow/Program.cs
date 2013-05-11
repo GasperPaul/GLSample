@@ -140,7 +140,7 @@ namespace GameWindow
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             if (fps) hud.Draw("FPS: " + (int)this.RenderFrequency);
             cube.Draw(ref view, ref proj);
-            
+            GL.Flush();
             this.SwapBuffers();
         }
 
