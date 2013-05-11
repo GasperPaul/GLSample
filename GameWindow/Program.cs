@@ -18,10 +18,10 @@ namespace GameWindow
         float angle = 0;
         float[] mouseSpeed = new float[2];
         Vector2 mouseDelta = new Vector2();
-        Vector3 location = new Vector3(0f, 0f, 10f);
+        Vector3 location = new Vector3(7f, 0f, -7f);
         Vector3 up = Vector3.UnitY;
-        float pitch = 0.0f;
-        float facing = 0.0f;
+        float pitch = -0.1f;
+        float facing = 2.5f;
         bool fps = false;
         
         // вершинний шейдер
@@ -133,7 +133,7 @@ namespace GameWindow
         {
             if (!this.Exists) return;
             Matrix4 view;
-            angle = angle < 360f ? angle + 0.001f : 0f;
+            angle = angle < 360f ? angle + 0.001f * (this.VSync==VSyncMode.On?10:1) : 0f;
             Matrix4.CreateRotationZ(angle, out view);
             view *= camera; // Matrix4.LookAt(2, 2, 2, 0, 0, 0, 0, 0, 1);
 
@@ -149,28 +149,28 @@ namespace GameWindow
             this.Title = "FPS: " + (int)this.RenderFrequency;
             if (Keyboard[Key.W])
             {
-                location.X += (float)Math.Cos(facing) * 0.01f;
-                location.Z += (float)Math.Sin(facing) * 0.01f;
+                location.X += (float)Math.Cos(facing) * 0.01f * (this.VSync==VSyncMode.On?10:1);
+                location.Z += (float)Math.Sin(facing) * 0.01f * (this.VSync==VSyncMode.On?10:1);
             }
             if (Keyboard[Key.S])
             {
-                location.X -= (float)Math.Cos(facing) * 0.01f;
-                location.Z -= (float)Math.Sin(facing) * 0.01f;
+                location.X -= (float)Math.Cos(facing) * 0.01f * (this.VSync==VSyncMode.On?10:1);
+                location.Z -= (float)Math.Sin(facing) * 0.01f * (this.VSync==VSyncMode.On?10:1);
             }
             if (Keyboard[Key.A])
             {
-                location.X -= (float)Math.Cos(facing + Math.PI / 2) * 0.01f;
-                location.Z -= (float)Math.Sin(facing + Math.PI / 2) * 0.01f;
+                location.X -= (float)Math.Cos(facing + Math.PI / 2) * 0.01f * (this.VSync==VSyncMode.On?10:1);
+                location.Z -= (float)Math.Sin(facing + Math.PI / 2) * 0.01f * (this.VSync==VSyncMode.On?10:1);
             }
             if (Keyboard[Key.D])
             {
-                location.X += (float)Math.Cos(facing + Math.PI / 2) * 0.01f;
-                location.Z += (float)Math.Sin(facing + Math.PI / 2) * 0.01f;
+                location.X += (float)Math.Cos(facing + Math.PI / 2) * 0.01f * (this.VSync==VSyncMode.On?10:1);
+                location.Z += (float)Math.Sin(facing + Math.PI / 2) * 0.01f * (this.VSync==VSyncMode.On?10:1);
             }
 
             var center = new Point((Bounds.Left + Bounds.Right) / 2, (Bounds.Top + Bounds.Bottom) / 2);
             mouseDelta = new Vector2(Mouse.X - PointToClient(center).X, Mouse.Y - PointToClient(center).Y);
-            Cursor.Position = center;
+            if (this.Focused) Cursor.Position = center;
             mouseSpeed[0] *= 0.9f;
             mouseSpeed[1] *= 0.9f;
             mouseSpeed[0] += mouseDelta.X / 1000f;
